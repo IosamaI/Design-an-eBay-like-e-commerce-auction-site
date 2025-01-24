@@ -1,0 +1,52 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Active Listings</h2>
+    
+    <form action="{% url 'displeyCtegory' %}" method="POST" class="row gy-3 mb-4 justify-content-center">
+    {% csrf_token %}
+    <div class="col-md-4">
+        <label for="category" class="form-label"><strong>Choose a category:</strong></label>
+        <select class="form-select" aria-label="Category select" name="category" required>
+        <option></option>
+            {% for i in category %}
+                <option value="{{ i.CategoryName }}">{{ i.CategoryName }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+    
+    <div class="row gy-4">
+        {% for i in listings %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ i.imgUrl }}" class="card-img-top" alt="{{ i.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ i.title }}</h5>
+                    <p class="card-text">{{ i.summary }}</p>
+                    <a href="{% url 'listing' id=i.id %}" class="btn btn-outline-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if listings|length == 0 %}
+    <div class="alert alert-warning text-center mt-4" role="alert">
+        No listings available in this category.
+    </div>
+    {% endif %}
+</div>
+
+<!-- Additional styling -->
+<style>
+    .form-select:focus {
+        border-color: dodgerblue;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+</style>
+{% endblock %}

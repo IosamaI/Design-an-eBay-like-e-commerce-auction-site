@@ -1,0 +1,127 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="row mx-1">
+    {% if user.is_authenticated and listing.IsActive %}
+        {% if isOwner %}
+        <form action="{% url 'closeAuction' id=listing.id %}" method="post" class="mb-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-lg">Close Auction</button>
+        </form>
+        {% endif %}
+    {% endif %}
+
+    {% if messages %}
+    <div class="alert alert-info mt-3">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% if not listing.IsActive %}
+    <div class="alert alert-info" role="alert">
+        This auction is closed.
+    </div>
+    {% if user == listing.price.user %}
+        <div class="alert alert-success" role="alert">
+            Congratulations! You won the auction.
+        </div>
+    {% endif %}
+{% endif %}
+
+<div class="row mx-3">
+    {% if islistingTrue %}
+        <form action="{% url 'removeWatchlist' id=listing.id %}" method="post" class="mb-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Remove From Watchlist</button>
+        </form>
+    {% elif listing.IsActive %}
+        <form action="{% url 'addWatchlist' id=listing.id %}" method="post" class="mb-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Add To Watchlist</button>
+        </form>
+    {% endif %}
+</div>
+
+<h2 class="my-4 text-center">{{ listing.title }}</h2>
+
+<div class="text-center mb-4">
+    <img src="{{ listing.imgUrl }}" alt="Image" class="img-fluid rounded shadow-sm" style="max-width: 60%;">
+</div>
+
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <p class="card-text" style="font-size: 1.1rem; line-height: 1.6;">{{ listing.description }}</p>
+    </div>
+</div>
+
+<div class="mb-4">
+    <h6 class="fw-bold mb-2" style="font-size: 1.2rem; color: #333;">Price: ${{ listing.price.bid }}</h6>
+    <h6 class="text-capitalize text-dark mb-0" style="font-weight: 600; font-size: 1.1rem;">Owner: {{ listing.owner.username }}</h6>
+</div>
+
+{% if user.is_authenticated %}
+    <form action="{% url 'addBid' id=listing.id %}" method="POST" class="border p-4 rounded shadow-sm bg-light mb-4">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="newBid" class="form-label h5"><strong>Add Your Bid</strong></label>
+            <input id="newBid" name="newBid" type="number" step="0.01" class="form-control form-control-lg" placeholder="Enter your bid here..." required>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-success btn-lg px-4">Send Bid</button>
+        </div>
+    </form>
+{% else %}
+    <p class="text-muted">You must be logged in to add a Bid.</p>
+{% endif %}
+
+<div class="mx-3">
+    <h2 class="my-4">Comments</h2>
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'addComment' id=listing.id %}" method="POST" class="border p-4 rounded shadow-sm bg-light mb-4">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="newComment" class="form-label h5"><strong>Add Your Comment</strong></label>
+                <textarea id="newComment" name="newComment" class="form-control form-control-lg" rows="4" placeholder="Write your comment here..."></textarea>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-success btn-lg px-4">Post Comment</button>
+            </div>
+        </form>
+    {% else %}
+        <p class="text-muted">You must be logged in to add a comment.</p>
+    {% endif %}
+</div>
+
+<ul class="list-group" style="margin-top: 30px;">
+    {% for i in allcomments %}
+        <li class="list-group-item mb-3 p-3 shadow-sm rounded" style="background-color: #f9f9f9; border-left: 5px solid dodgerblue;">
+            <p style="font-size: 1.1rem; color: #333;">{{ i.message }}</p>
+            <p class="text-muted">Posted by: <strong>{{ i.author }}</strong></p>
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'index' %}" class="btn btn-secondary btn-lg px-4 mb-4" style="background-color: dodgerblue;">Back to Listings</a>
+
+<!-- Styling -->
+<style>
+    .form-control {
+        transition: border-color 0.3s ease;
+    }
+    .form-control:focus {
+        border-color: dodgerblue;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    .btn-success {
+        background-color: dodgerblue;
+        border: none;
+    }
+    .btn-success:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
