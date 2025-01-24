@@ -1,5 +1,5 @@
 # Auction Site: eBay-like E-commerce Platform
-![Uploading image.png…]()
+
 
 ## Distinctiveness and Complexity
 This project is an eBay-like e-commerce auction platform built using Django. It is distinctive and complex for the following reasons:
