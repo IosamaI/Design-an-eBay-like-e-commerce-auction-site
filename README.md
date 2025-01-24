@@ -1,6 +1,9 @@
 # Auction Site: eBay-like E-commerce Platform
 ![Screenshot of the auction site](https://github.com/user-attachments/assets/f5c7a9a1-edd3-4af5-a87e-20fbaf394447)
 
+![listings](https://github.com/user-attachments/assets/0ab6c7cc-91db-45d0-9b29-a5bda59befa3)
+
+
 
 
 ## Distinctiveness and Complexity
