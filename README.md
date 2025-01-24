@@ -108,7 +108,6 @@ The project is designed to accommodate additional features, such as notification
 ### Requirements
 Ensure the following packages are installed:
 - Django
-- Any other packages specified in `requirements.txt`.
 
 This project demonstrates an in-depth understanding of Django and web application development, showcasing features that combine technical complexity with practical utility.
 
